@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wine Search</title>
+</head>
+<body>
+    <h1>Wine Search</h1>
+    <input type="text" id="wineId" placeholder="Enter Wine ID"><br><br>
+    <button onclick="searchWine()">Search</button>
+    
+    <h1>Create Wine</h1>
+    <input type="text" id="wineTitle" placeholder="Wine title"><br><br>
+    <input type="text" id="wineDesc" placeholder="Wine description"><br><br>
+    <button onclick="postWine()">Create</button>
+    <div id="result"></div>
+
+    <script defer>
+        async function searchWine() {
+            const wineId = document.getElementById('wineId').value;
+            const response = await fetch(`http://localhost:3000/wine/${wineId}`);
+
+            if (response.ok) {
+                const wine = await response.json();
+                document.getElementById('result').innerHTML = `
+                    <h2>${wine.title}</h2>
+                    <p>${wine.desc}</p>
+                `;
+            } else {
+                document.getElementById('result').innerHTML = '<p>Wine not found.</p>';
+            }
+        }
+
+        async function postWine() {
+
+                const wineTitle = document.getElementById('wineTitle').value;
+                const wineDesc = document.getElementById('wineDesc').value;
+
+                try {
+                    const response = await fetch('http://localhost:3000/wine', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ wineTitle, wineDesc })
+                    });
+
+                    if (response.ok) {
+                        document.getElementById('addResult').innerHTML = '<p>Wine added successfully!</p>';
+                        document.getElementById('wineForm').reset();
+                        console.log('created');
+                    } else {
+                        const errorText = await response.text();
+                        document.getElementById('addResult').innerHTML = `<p>Failed to add wine: ${errorText}</p>`;
+                        console.log('not created', errorText);
+                    }
+                } catch (error) {
+                    document.getElementById('addResult').innerHTML = `<p>Error: ${error.message}</p>`;
+                    console.error('Fetch error:', error);
+                }
+            }
+
+    </script>
+</body>
+</html>
