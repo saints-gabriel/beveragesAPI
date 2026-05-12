@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wine API - Developer Playground</title>
+    <style>
+        :root {
+            --primary-color: #6a050f; /* Deep wine red */
+            --secondary-color: #e9c46a; /* Gold/Accent */
+            --text-color: #333;
+            --bg-color: #f4f2f0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        .header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin-top: 0;
+            font-size: 2.5em;
+        }
+        .container {
+            padding: 30px;
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+        /* API Card Styling */
+        .api-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 6px;
+        }
+        .card {
+            flex: 1 1 300px; /* Allows cards to wrap */
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-left: 5px solid var(--primary-color);
+            background: #fafafa;
+            border-radius: 4px;
+        }
+        .card h3 {
+            margin-top: 0;
+            font-size: 1.2em;
+            color: var(--primary-color);
+        }
+        /* Input/Button Styling */
+        input[type="text"], textarea {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #8c0612; /* Darker red on hover */
+        }
+        
+        /* Results Area */
+        #results-container pre {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body class="container">
+    <header class="header">
+        <h1>🍷 Wine API Developer Playground</h1>
+        <p>Test all endpoints defined in the <code>wineController</code> directly from your browser.</p>
+    </header>
+    <div class="container">
+        <!-- ====================================== -->
+        <!-- 1. READ OPERATIONS (GET) -->
+        <!-- ====================================== -->
+        <section id="read-operations">
+            <h2 style="margin-top: 30px;">🔍 Retrieve Wine Data (GET Requests)</h2>
+            <!-- Get All Wines -->
+            <div class="api-section">
+                <div class="card">
+                    <h3>All Wines</h3>
+                    <p><strong>Endpoint:</strong> <code class="endpoint-text">/wines</code></p>
+                    <button onclick="callApi('getAllWines')">Fetch All Wines (Read)</button>
+                    <h4>Result:</h4>
+                    <pre id="result-all"></pre>
+                </div>
+                 <!-- Get Wine by ID -->
+                <div class="card">
+                    <h3>Get Wine By ID</h3>
+                    <p><strong>Endpoint:</strong> <code class="endpoint-text">/wines/:id</code></p>
+                    <input type="text" id="get-id" placeholder="Enter Wine ID (e.g., 1)">
+                    <button onclick="callApi('getWineByID')">Fetch by ID</button>
+                    <h4>Result:</h4>
+                    <pre id="result-by-id"></pre>
+                </div>
+                 <!-- Find Wines by Name -->
+                <div class="card">
+                    <h3>Search Wine By Name</h3>
+                    <p><strong>Endpoint:</strong> <code class="endpoint-text">/wines/search/:name</code></p>
+                    <input type="text" id="search-name" placeholder="Enter partial name (e.g., Merlot)">
+                    <button onclick="callApi('findByName')">Search by Name</button>
+                    <h4>Result:</h4>
+                    <pre id="result-by-name"></pre>
+                </div>
+            </div>
+        </section>
+        <!-- ====================================== -->
+        <!-- 2. WRITE OPERATIONS (POST/PUT) -->
+        <!-- ====================================== -->
+        <section id="write-operations">
+            <h2>✍️ Modify Wine Data (POST/PUT Requests)</h2>
+            <div class="api-section">
+                <div class="card" style="flex: 1 1 300px;">
+                    <h3>Create New Wine</h3>
+                    <p><strong>Endpoint:</strong> <code class="endpoint-text">/wines</code> (POST)</p>
+                    <input type="text" id="create-name" placeholder="Name (e.g., Pinot Noir)">
+                    <textarea id="create-description" placeholder="Description"></textarea>
+                    <button onclick="callApi('createWine')">Create Wine</button>
+                    <h4>Result:</h4>
+                    <pre id="result-create"></pre>
+                </div>
+                <div class="card" style="flex: 1 1 300px;">
+                    <h3>Update Existing Wine</h3>
+                    <p><strong>Endpoint:</strong> <code class="endpoint-text">/wines/:id</code> (PUT)</p>
+                    <input type="text" id="edit-id" placeholder="Wine ID to Edit">
+                    <input type="text" id="edit-name" placeholder="New Name">
+                    <textarea id="edit-description" placeholder="Updated Description"></textarea>
+                    <button onclick="callApi('editWine')">Update Wine</button>
+                    <h4>Result:</h4>
+                    <pre id="result-edit"></pre>
+                </div>
+            </div>
+        </section>
+         <!-- ====================================== -->
+        <!-- 3. META OPERATIONS -->
+        <!-- ====================================== -->
+        <section id="meta-operations">
+             <h2>🔢 Meta Data</h2>
+            <div class="api-section">
+                 <div class="card" style="flex: 1 1 300px;">
+                    <h3>Get Total Wine Count</h3>
+                    <p><strong>Endpoint:</strong> <code class="endpoint-text">/wines/count</code></p>
+                    <button onclick="callApi('getAndCount')">Fetch Total Count</button>
+                    <h4>Result:</h4>
+                    <pre id="result-count"></pre>
+                </div>
+            </div>
+        </section>
+    </div>
+
+<script>
+    // -------------------------------------------------------
+    const BASE_URL = `http://100.71.164.11:3000`;
+    
+    async function callApi(endpointKey) {
+        let url = '';
+        let method = 'GET';
+        let bodyData = null;
+
+        // 1. Reset results and determine parameters
+        document.querySelectorAll('pre').forEach(el => el.textContent = '... Loading...');
+        
+        if (endpointKey === 'getAllWines') {
+            url = `${BASE_URL}/wines`;
+            document.getElementById('result-all').textContent = 'Fetching all wines...';
+        } else if (endpointKey === 'getWineByID') {
+            const id = document.getElementById('get-id').value;
+            if (!id) { alert("Please enter an ID."); return; }
+            url = `${BASE_URL}/wines/${id}`;
+            document.getElementById('result-by-id').textContent = 'Fetching wine by ID...';
+        } else if (endpointKey === 'findByName') {
+            const name = document.getElementById('search-name').value;
+            if (!name) { alert("Please enter a name to search."); return; }
+            // Assuming the backend uses query parameters for searching
+            url = `${BASE_URL}/wines/search/${encodeURIComponent(name)}`; 
+            document.getElementById('result-by-name').textContent = 'Searching wines...';
+        } else if (endpointKey === 'createWine') {
+            const name = document.getElementById('create-name').value;
+            const description = document.getElementById('create-description').value;
+            if (!name) { alert("Please enter a wine name."); return; }
+            url = `${BASE_URL}/wines`;
+            method = 'POST';
+            bodyData = { name, description }; // Set body data for POST
+            document.getElementById('result-create').textContent = 'Creating new wine...';
+        } else if (endpointKey === 'editWine') {
+            const id = document.getElementById('edit-id').value;
+            const name = document.getElementById('edit-name').value;
+            const description = document.getElementById('edit-description').value;
+             if (!id) { alert("Please enter the ID of the wine to edit."); return; }
+            url = `${BASE_URL}/wines/${id}`;
+            method = 'PUT';
+            bodyData = { name, description }; // Set body data for PUT
+             document.getElementById('result-edit').textContent = 'Updating wine data...';
+        } else if (endpointKey === 'getAndCount') {
+            url = `${BASE_URL}/wines/count`;
+            document.getElementById('result-count').textContent = 'Counting wines in the database...';
+        }
+
+        // 2. Build fetch options dynamically to prevent GET requests from having a body.
+        const options = {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        };
+
+        // ONLY attach the body if it is defined AND if the method supports sending a body (POST or PUT).
+        if (bodyData && ['POST', 'PUT'].includes(method)) {
+            options.body = JSON.stringify(bodyData);
+        } else if (['GET', 'HEAD', 'DELETE'].includes(method) && !bodyData) {
+             // For GET requests, ensure no body is attached explicitly. 
+             // By not adding `body` to the options object, we solve the TypeError.
+        }
+
+
+        // 3. Perform Fetch Call
+        console.log(`--- Calling ${method} on ${url} with body:`, bodyData);
+        try {
+            const response = await fetch(url, options); // Use the constructed 'options' object
+
+            let resultText;
+            if (!response.ok) {
+                // Handle API errors (4xx, 5xx status codes)
+                try {
+                    const errorJson = await response.json();
+                    resultText = `ERROR ${response.status}: \n${JSON.stringify(errorJson, null, 2)}`;
+                } catch {
+                     resultText = `NETWORK ERROR: Received non-JSON response (${response.status}).`;
+                }
+            } else {
+                 // Handle successful responses (2xx status codes)
+                 try {
+                    const data = await response.json();
+                    resultText = JSON.stringify(data, null, 2);
+                } catch {
+                     resultText = "SUCCESS: Received a valid but non-JSON response.";
+                }
+            }
+
+            // 4. Display results
+            let targetId = '';
+            if (endpointKey === 'getAllWines') targetId = 'result-all';
+            else if (endpointKey === 'getWineByID') targetId = 'result-by-id';
+            else if (endpointKey === 'findByName') targetId = 'result-by-name';
+            else if (endpointKey === 'createWine') targetId = 'result-create';
+            else if (endpointKey === 'editWine') targetId = 'result-edit';
+            else if (endpointKey === 'getAndCount') targetId = 'result-count';
+
+            if (targetId) {
+                document.getElementById(targetId).textContent = resultText;
+            }
+        } catch (e) {
+             // Handle network failures (CORS, server down, etc.)
+             let errorHtml = `\n--- NETWORK ERROR ---\nThe API call failed to reach the server or was blocked by CORS/network policies. Error details: ${e.message}`;
+             console.error("Fetch Error:", e);
+             alert(errorHtml);
+        }
+    }
+</script>
+
+</body>
+</html>
