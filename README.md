@@ -1,4 +1,4 @@
-# WineAPI (BeveragesAPI)
+# BeveragesAPI
 ---
 A simple API to learn about REST API calls.
 
