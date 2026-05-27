@@ -12,6 +12,10 @@ On the project's directory, modify the **.env** to the local variables of your d
 
 It should show in the terminal that the service is working, now acess your endpoint (something in the lines of):
 
-http://localhost:3000/api
+http://localhost:3000/frontend
+
+If you wish to connect directly into the API, to see the raw JSON of all the beverages, access:
+
+http://localhost:3000/api/beverages
 
 Have fun and create your funny beverages!
