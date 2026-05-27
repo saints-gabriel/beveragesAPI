@@ -2,7 +2,7 @@
 ---
 A simple API to learn about REST API calls.
 
-It contains a GUI hosted at the /api endpoint for you to search, create and modify beverages to your liking.
+It contains a GUI hosted at the /frontend endpoint for you to search, create and modify beverages to your liking.
 
 On the project's directory, modify the **.env** to the local variables of your database and API port, open the terminal and type:
 
